@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Inspect from './pages/Inspect';
+import SavedImages from './pages/SavedImages';
 
 // Create theme
 const theme = createTheme({
@@ -28,6 +29,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/inspect" element={<Inspect />} />
+          <Route path="/saved" element={<SavedImages />} />
         </Routes>
       </Router>
     </ThemeProvider>

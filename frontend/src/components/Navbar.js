@@ -30,6 +30,12 @@ function Navbar() {
               to="/inspect" 
               sx={{ color: 'white' }}
             />
+            <Tab 
+              label="Saved" 
+              component={Link} 
+              to="/saved" 
+              sx={{ color: 'white' }}
+            />
           </Tabs>
         </Box>
       </Toolbar>
