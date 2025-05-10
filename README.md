@@ -1,66 +1,98 @@
-# Image Classification Project
+# Image Classification System
 
-This repository contains an image classification project developed for System Developments course using MERN stack.
+A full-stack web application for image classification and object detection using machine learning models.
 
-## Project Description
-A full-stack web application for image classification tasks using MERN (MongoDB, Express.js, React.js, Node.js) stack.
+## Features
+
+- Image classification using DenseNet121
+- Object detection using YOLOv8
+- Real-time image analysis
+- Dashboard with statistics and model information
+- Image inspection and analysis
+- Save and manage analyzed images
+- Comment system for analyzed images
+
+## Tech Stack
+
+### Frontend
+- React.js
+- Material-UI
+- Axios for API calls
+- React Router for navigation
+
+### Backend
+- Node.js with Express
+- MongoDB for data storage
+- Multer for file uploads
+- Machine Learning models:
+  - DenseNet121 for classification
+  - YOLOv8 for object detection
 
 ## Setup
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   # Install backend dependencies
-   cd backend
-   npm install
 
-   # Install frontend dependencies
-   cd ../frontend
-   npm install
-   ```
+1. Clone the repository:
+```bash
+git clone https://github.com/AbdulSalamGhazal/Image_Classification.git
+cd Image_Classification
+```
 
-3. Environment Setup:
-   - Create a `.env` file in the backend directory with the following variables:
-     ```
-     PORT=5000
-     MONGODB_URI=your_mongodb_uri
-     JWT_SECRET=your_jwt_secret
-     ```
+2. Backend Setup:
+```bash
+cd backend
+npm install
+cp .env.example .env  # Configure your environment variables
+npm start
+```
 
-4. Start the development servers:
-   ```bash
-   # Start backend server
-   cd backend
-   npm run dev
+3. Frontend Setup:
+```bash
+cd frontend
+npm install
+cp .env.example .env  # Configure your environment variables
+npm start
+```
 
-   # Start frontend server (in a new terminal)
-   cd frontend
-   npm start
-   ```
+4. Database Setup:
+- Ensure MongoDB is installed and running
+- The application will automatically create necessary collections
+
+## Environment Variables
+
+### Backend (.env)
+- `PORT`: Server port (default: 5001)
+- `MONGODB_URI`: MongoDB connection string
+- `MAX_FILE_SIZE`: Maximum file upload size
+- `ALLOWED_FILE_TYPES`: Allowed file types for upload
+
+### Frontend (.env)
+- `REACT_APP_API_URL`: Backend API URL
 
 ## Project Structure
+
 ```
 Image_Classification/
-├── backend/           # Node.js/Express backend
-│   ├── config/       # Configuration files
-│   ├── controllers/  # Route controllers
-│   ├── models/       # Database models
-│   ├── routes/       # API routes
-│   ├── middleware/   # Custom middleware
-│   └── server.js     # Entry point
-├── frontend/         # React frontend
-│   ├── public/       # Static files
-│   ├── src/          # Source code
-│   │   ├── components/  # React components
-│   │   ├── pages/      # Page components
-│   │   ├── services/   # API services
-│   │   └── utils/      # Utility functions
-│   └── package.json
-├── .gitignore        # Git ignore file
-└── README.md         # Project documentation
+├── backend/
+│   ├── models/         # Database models
+│   ├── routes/         # API routes
+│   ├── uploads/        # Uploaded images
+│   └── server.js       # Main server file
+├── frontend/
+│   ├── public/         # Static files
+│   └── src/
+│       ├── components/ # Reusable components
+│       ├── pages/      # Page components
+│       └── App.js      # Main app component
+└── README.md
 ```
 
-## Usage
-[Add usage instructions here]
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
-[Add license information here] 
+
+This project is licensed under the MIT License - see the LICENSE file for details. 

@@ -37,13 +37,14 @@ ENV/
 # Environment variables
 .env
 .env.local
+.env.*
+!.env.example
 
 # Logs
 *.log
 
 # Dataset files (if you have large datasets)
 *.csv
-*.json
 *.h5
 *.pkl
 *.npy
@@ -56,7 +57,6 @@ ENV/
 
 # Dependencies
 node_modules/
-package-lock.json
 /.pnp
 .pnp.js
 
@@ -75,28 +75,17 @@ Thumbs.db
 .debug
 
 # Temporary files
-*.log
 *.tmp
 *.temp
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Environment variables
-.env.development.local
-.env.test.local
-.env.production.local
-
 # Uploaded files
-backend/uploads/
-frontend/public/uploads/
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+backend/uploads/*
+!backend/uploads/.gitkeep
+frontend/public/uploads/*
+!frontend/public/uploads/.gitkeep
 
 # Runtime data
 pids
@@ -109,12 +98,6 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
-
-# IDE files
-.idea/
-.vscode/
-*.swp
-*.swo
 
 # OS generated files
 .DS_Store
