@@ -15,6 +15,10 @@ const savedImageSchema = new mongoose.Schema({
       y: Number,
       width: Number,
       height: Number
+    },
+    processingTime: {
+      type: Number,
+      required: true
     }
   },
   comments: [{

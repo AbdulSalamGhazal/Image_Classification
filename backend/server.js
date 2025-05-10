@@ -43,6 +43,8 @@ app.post('/api/analyze', upload.single('image'), (req, res) => {
     return res.status(400).json({ error: 'No image file provided' });
   }
 
+  const startTime = Date.now();
+
   // Simulate processing time
   setTimeout(() => {
     // Generate random probability between 0.5 and 1.0
@@ -55,6 +57,8 @@ app.post('/api/analyze', upload.single('image'), (req, res) => {
     const width = (Math.random() * 0.3 + 0.1).toFixed(2); // width (0.1-0.4)
     const height = (Math.random() * 0.3 + 0.1).toFixed(2); // height (0.1-0.4)
 
+    const processingTime = Date.now() - startTime;
+
     res.json({
       probability: parseFloat(probability),
       boundingBox: {
@@ -62,7 +66,8 @@ app.post('/api/analyze', upload.single('image'), (req, res) => {
         y: parseFloat(y),
         width: parseFloat(width),
         height: parseFloat(height)
-      }
+      },
+      processingTime
     });
   }, 2000); // Simulate 2 seconds processing time
 });

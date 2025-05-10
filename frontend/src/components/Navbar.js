@@ -13,10 +13,14 @@ function Navbar() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" component="div">
           Image Classification
         </Typography>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ 
+          flexGrow: 1,
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
           <Tabs value={value} onChange={handleChange} textColor="inherit">
             <Tab 
               label="Dashboard" 
