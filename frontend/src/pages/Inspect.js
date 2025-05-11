@@ -13,7 +13,8 @@ import {
   Divider,
   Grid,
   Snackbar,
-  Alert
+  Alert,
+  Stack
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloseIcon from '@mui/icons-material/Close';
@@ -21,6 +22,9 @@ import SaveIcon from '@mui/icons-material/Save';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
+import PercentIcon from '@mui/icons-material/Percent';
+import WarningIcon from '@mui/icons-material/Warning';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 function Inspect() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -77,15 +81,15 @@ function Inspect() {
 
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
-    if (!comment.trim() || !selectedImage || !analysisResult) return;
+    if (!selectedImage || !analysisResult) return;
 
     const formData = new FormData();
     formData.append('image', selectedImage);
     formData.append('analysisResult', JSON.stringify(analysisResult));
-    formData.append('comments', JSON.stringify([{
+    formData.append('comments', JSON.stringify(comment.trim() ? [{
       text: comment,
       timestamp: new Date().toLocaleString()
-    }]));
+    }] : []));
 
     try {
       await axios.post('http://localhost:5001/api/saved-images', formData, {
@@ -292,9 +296,79 @@ function Inspect() {
 
                 {analysisResult && (
                   <Box sx={{ mt: 3, textAlign: 'center' }}>
-                    <Typography variant="h6" color="primary">
-                      Detection Probability: {(analysisResult.probability * 100).toFixed(2)}%
-                    </Typography>
+                    <Stack 
+                      direction="row" 
+                      spacing={3} 
+                      alignItems="center" 
+                      justifyContent="center"
+                      sx={{ mb: 2 }}
+                    >
+                      {/* Probability Display */}
+                      <Box sx={{ 
+                        position: 'relative',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                        <CircularProgress
+                          variant="determinate"
+                          value={analysisResult.probability * 100}
+                          size={120}
+                          thickness={4}
+                          sx={{
+                            color: analysisResult.probability > 0.5 ? 'error.main' : 'success.main',
+                            '& .MuiCircularProgress-circle': {
+                              strokeLinecap: 'round',
+                            },
+                          }}
+                        />
+                        <Box
+                          sx={{
+                            top: 0,
+                            left: 0,
+                            bottom: 0,
+                            right: 0,
+                            position: 'absolute',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <Typography variant="h4" component="div" sx={{ fontWeight: 'bold' }}>
+                            {(analysisResult.probability * 100).toFixed(1)}%
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            Probability
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      {/* Diagnosis Label */}
+                      <Box sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center',
+                        backgroundColor: analysisResult.probability > 0.5 ? 'error.light' : 'success.light',
+                        color: analysisResult.probability > 0.5 ? 'error.contrastText' : 'success.contrastText',
+                        px: 3,
+                        py: 1.5,
+                        borderRadius: 2,
+                        boxShadow: 1,
+                        minWidth: 200
+                      }}>
+                        {analysisResult.probability > 0.5 ? (
+                          <>
+                            <WarningIcon sx={{ fontSize: 28, mr: 1 }} />
+                            <Typography variant="h6">Pneumonia Detected</Typography>
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircleIcon sx={{ fontSize: 28, mr: 1 }} />
+                            <Typography variant="h6">No Pneumonia Detected</Typography>
+                          </>
+                        )}
+                      </Box>
+                    </Stack>
                   </Box>
                 )}
               </Grid>
@@ -303,7 +377,7 @@ function Inspect() {
                 <Grid item xs={12} md={4}>
                   <Box sx={{ width: '100%' }}>
                     <Typography variant="h6" gutterBottom>
-                      Add Comment
+                      Add Comment (Optional)
                     </Typography>
                     <Box 
                       component="form" 
@@ -327,6 +401,7 @@ function Inspect() {
                           onChange={setComment}
                           modules={modules}
                           formats={formats}
+                          placeholder="Add a comment (optional)..."
                         />
                       </Box>
                       <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
@@ -335,9 +410,8 @@ function Inspect() {
                           variant="contained"
                           color="primary"
                           endIcon={<SaveIcon />}
-                          disabled={!comment.trim()}
                         >
-                          Save
+                          Save Analysis
                         </Button>
                         <Button
                           variant="outlined"

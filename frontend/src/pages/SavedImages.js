@@ -19,9 +19,12 @@ import {
   Alert,
   DialogActions,
   Button,
-  Snackbar
+  Snackbar,
+  Stack
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import WarningIcon from '@mui/icons-material/Warning';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import axios from 'axios';
 
 function SavedImages() {
@@ -137,17 +140,89 @@ function SavedImages() {
                     sx={{ 
                       cursor: 'pointer',
                       objectFit: 'contain',
-                      backgroundColor: '#f5f5f5'
+                      backgroundColor: '#f5f5f5',
+                      position: 'relative'
                     }}
                     onClick={() => handleImageClick(image)}
                   />
                   <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Detection Probability: {(image.analysisResult.probability * 100).toFixed(2)}%
-                    </Typography>
+                    <Stack 
+                      direction="row" 
+                      spacing={2} 
+                      alignItems="center" 
+                      justifyContent="space-between"
+                      sx={{ mb: 2 }}
+                    >
+                      {/* Probability Display */}
+                      <Box sx={{ 
+                        position: 'relative',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                        <CircularProgress
+                          variant="determinate"
+                          value={image.analysisResult.probability * 100}
+                          size={60}
+                          thickness={4}
+                          sx={{
+                            color: image.analysisResult.probability > 0.5 ? 'error.main' : 'success.main',
+                            '& .MuiCircularProgress-circle': {
+                              strokeLinecap: 'round',
+                            },
+                          }}
+                        />
+                        <Box
+                          sx={{
+                            top: 0,
+                            left: 0,
+                            bottom: 0,
+                            right: 0,
+                            position: 'absolute',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <Typography variant="subtitle1" component="div" sx={{ fontWeight: 'bold' }}>
+                            {(image.analysisResult.probability * 100).toFixed(1)}%
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      {/* Diagnosis Label */}
+                      <Box sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center',
+                        backgroundColor: image.analysisResult.probability > 0.5 ? 'error.light' : 'success.light',
+                        color: image.analysisResult.probability > 0.5 ? 'error.contrastText' : 'success.contrastText',
+                        px: 2,
+                        py: 0.5,
+                        borderRadius: 1,
+                        minWidth: 140
+                      }}>
+                        {image.analysisResult.probability > 0.5 ? (
+                          <>
+                            <WarningIcon sx={{ fontSize: 20, mr: 0.5 }} />
+                            <Typography variant="body2">Pneumonia</Typography>
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircleIcon sx={{ fontSize: 20, mr: 0.5 }} />
+                            <Typography variant="body2">No Pneumonia</Typography>
+                          </>
+                        )}
+                      </Box>
+                    </Stack>
+
                     <Typography variant="body2" color="text.secondary">
                       Saved on: {new Date(image.createdAt).toLocaleString()}
                     </Typography>
+                    {image.comments && image.comments.length > 0 && (
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                        {image.comments.length} comment{image.comments.length !== 1 ? 's' : ''}
+                      </Typography>
+                    )}
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                       <IconButton 
                         onClick={(e) => {
@@ -176,7 +251,7 @@ function SavedImages() {
           <DialogContent>
             {selectedImage && (
               <Box>
-                <Box sx={{ position: 'relative', mb: 2 }}>
+                <Box sx={{ position: 'relative', mb: 3 }}>
                   <img
                     src={`http://localhost:5001${selectedImage.imageUrl}`}
                     alt="Selected image"
@@ -186,7 +261,7 @@ function SavedImages() {
                       objectFit: 'contain'
                     }}
                   />
-                  {selectedImage && selectedImage.analysisResult && selectedImage.analysisResult.boundingBox && (
+                  {selectedImage.analysisResult.boundingBox && (
                     <Box
                       sx={{
                         position: 'absolute',
@@ -200,9 +275,81 @@ function SavedImages() {
                     />
                   )}
                 </Box>
-                <Typography variant="h6" gutterBottom>
-                  Detection Probability: {(selectedImage.analysisResult.probability * 100).toFixed(2)}%
-                </Typography>
+
+                <Stack 
+                  direction="row" 
+                  spacing={3} 
+                  alignItems="center" 
+                  justifyContent="center"
+                  sx={{ mb: 3 }}
+                >
+                  {/* Probability Display */}
+                  <Box sx={{ 
+                    position: 'relative',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    <CircularProgress
+                      variant="determinate"
+                      value={selectedImage.analysisResult.probability * 100}
+                      size={100}
+                      thickness={4}
+                      sx={{
+                        color: selectedImage.analysisResult.probability > 0.5 ? 'error.main' : 'success.main',
+                        '& .MuiCircularProgress-circle': {
+                          strokeLinecap: 'round',
+                        },
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        position: 'absolute',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection: 'column',
+                      }}
+                    >
+                      <Typography variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
+                        {(selectedImage.analysisResult.probability * 100).toFixed(1)}%
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        Probability
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  {/* Diagnosis Label */}
+                  <Box sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center',
+                    backgroundColor: selectedImage.analysisResult.probability > 0.5 ? 'error.light' : 'success.light',
+                    color: selectedImage.analysisResult.probability > 0.5 ? 'error.contrastText' : 'success.contrastText',
+                    px: 3,
+                    py: 1.5,
+                    borderRadius: 2,
+                    boxShadow: 1,
+                    minWidth: 180
+                  }}>
+                    {selectedImage.analysisResult.probability > 0.5 ? (
+                      <>
+                        <WarningIcon sx={{ fontSize: 28, mr: 1 }} />
+                        <Typography variant="h6">Pneumonia Detected</Typography>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircleIcon sx={{ fontSize: 28, mr: 1 }} />
+                        <Typography variant="h6">No Pneumonia Detected</Typography>
+                      </>
+                    )}
+                  </Box>
+                </Stack>
+
                 <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                   Comments
                 </Typography>
