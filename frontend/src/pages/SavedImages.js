@@ -186,17 +186,19 @@ function SavedImages() {
                       objectFit: 'contain'
                     }}
                   />
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      border: '2px solid #ff0000',
-                      backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                      left: `${selectedImage.analysisResult.boundingBox.x * 100}%`,
-                      top: `${selectedImage.analysisResult.boundingBox.y * 100}%`,
-                      width: `${selectedImage.analysisResult.boundingBox.width * 100}%`,
-                      height: `${selectedImage.analysisResult.boundingBox.height * 100}%`,
-                    }}
-                  />
+                  {selectedImage && selectedImage.analysisResult && selectedImage.analysisResult.boundingBox && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        border: '2px solid #ff0000',
+                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                        left: `${selectedImage.analysisResult.boundingBox.x * 100}%`,
+                        top: `${selectedImage.analysisResult.boundingBox.y * 100}%`,
+                        width: `${selectedImage.analysisResult.boundingBox.width * 100}%`,
+                        height: `${selectedImage.analysisResult.boundingBox.height * 100}%`,
+                      }}
+                    />
+                  )}
                 </Box>
                 <Typography variant="h6" gutterBottom>
                   Detection Probability: {(selectedImage.analysisResult.probability * 100).toFixed(2)}%

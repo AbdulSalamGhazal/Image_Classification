@@ -4,6 +4,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const multer = require('multer');
 const path = require('path');
+const axios = require('axios');
+const FormData = require('form-data');
 const savedImagesRouter = require('./routes/savedImages');
 
 // Load environment variables
@@ -38,38 +40,50 @@ app.get('/', (req, res) => {
 });
 
 // Image analysis endpoint
-app.post('/api/analyze', upload.single('image'), (req, res) => {
+app.post('/api/analyze', upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No image file provided' });
   }
 
   const startTime = Date.now();
 
-  // Simulate processing time
-  setTimeout(() => {
-    // Generate random probability between 0.5 and 1.0
-    const probability = (Math.random() * 0.5 + 0.5).toFixed(2);
-    
-    // Generate random bounding box values (x, y, width, height)
-    // Values are normalized between 0 and 1
-    const x = (Math.random() * 0.7).toFixed(2); // x coordinate (0-0.7)
-    const y = (Math.random() * 0.7).toFixed(2); // y coordinate (0-0.7)
-    const width = (Math.random() * 0.3 + 0.1).toFixed(2); // width (0.1-0.4)
-    const height = (Math.random() * 0.3 + 0.1).toFixed(2); // height (0.1-0.4)
+  try {
+    // Create form data for the ML API
+    const formData = new FormData();
+    formData.append('file', req.file.buffer, {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype
+    });
+
+    // Call the ML API
+    const mlApiResponse = await axios.post('http://127.0.0.1:8000/predict/image/', formData, {
+      headers: {
+        ...formData.getHeaders()
+      }
+    });
 
     const processingTime = Date.now() - startTime;
-
-    res.json({
-      probability: parseFloat(probability),
-      boundingBox: {
-        x: parseFloat(x),
-        y: parseFloat(y),
-        width: parseFloat(width),
-        height: parseFloat(height)
-      },
+    const responseData = {
+      ...mlApiResponse.data,
       processingTime
+    };
+
+    // Log the analysis results
+    console.log('\n=== Image Analysis Results ===');
+    console.log('Probability:', (responseData.probability * 100).toFixed(2) + '%');
+    console.log('Bounding Box:', responseData.boundingBox);
+    console.log('Processing Time:', processingTime + 'ms');
+    console.log('=============================\n');
+
+    // Return the ML API response with processing time
+    res.json(responseData);
+  } catch (error) {
+    console.error('Error calling ML API:', error);
+    res.status(500).json({ 
+      error: 'Error processing image',
+      details: error.response?.data?.detail || error.message
     });
-  }, 2000); // Simulate 2 seconds processing time
+  }
 });
 
 app.use('/api/saved-images', savedImagesRouter);

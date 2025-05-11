@@ -255,7 +255,7 @@ function Inspect() {
                         objectFit: 'contain',
                       }}
                     />
-                    {analysisResult && (
+                    {analysisResult && analysisResult.boundingBox && (
                       <Box
                         sx={{
                           position: 'absolute',
