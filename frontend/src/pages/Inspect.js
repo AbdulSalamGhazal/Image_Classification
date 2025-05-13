@@ -66,7 +66,7 @@ function Inspect() {
     formData.append('image', selectedImage);
 
     try {
-      const response = await axios.post('http://localhost:5001/api/analyze', formData, {
+      const response = await axios.post('http://localhost:5050/api/analyze', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -92,7 +92,7 @@ function Inspect() {
     }] : []));
 
     try {
-      await axios.post('http://localhost:5001/api/saved-images', formData, {
+      await axios.post('http://localhost:5050/api/saved-images', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -119,7 +119,7 @@ function Inspect() {
     formData.append('comments', JSON.stringify(comments));
 
     try {
-      await axios.post('http://localhost:5001/api/saved-images', formData, {
+      await axios.post('http://localhost:5050/api/saved-images', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

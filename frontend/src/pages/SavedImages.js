@@ -45,7 +45,7 @@ function SavedImages() {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get('http://localhost:5001/api/saved-images');
+      const response = await axios.get('http://localhost:5050/api/saved-images');
       setSavedImages(response.data);
     } catch (error) {
       console.error('Error fetching saved images:', error);
@@ -62,7 +62,7 @@ function SavedImages() {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`http://localhost:5001/api/saved-images/${imageToDelete._id}`);
+      await axios.delete(`http://localhost:5050/api/saved-images/${imageToDelete._id}`);
       setSavedImages(savedImages.filter(image => image._id !== imageToDelete._id));
       setDeleteSuccess(true);
     } catch (error) {
@@ -135,7 +135,7 @@ function SavedImages() {
                   <CardMedia
                     component="img"
                     height="200"
-                    image={`http://localhost:5001${image.imageUrl}`}
+                    image={`http://localhost:5050${image.imageUrl}`}
                     alt="Saved image"
                     sx={{ 
                       cursor: 'pointer',
@@ -253,7 +253,7 @@ function SavedImages() {
               <Box>
                 <Box sx={{ position: 'relative', mb: 3 }}>
                   <img
-                    src={`http://localhost:5001${selectedImage.imageUrl}`}
+                    src={`http://localhost:5050${selectedImage.imageUrl}`}
                     alt="Selected image"
                     style={{ 
                       width: '100%', 

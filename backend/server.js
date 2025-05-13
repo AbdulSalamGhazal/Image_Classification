@@ -89,7 +89,7 @@ app.post('/api/analyze', upload.single('image'), async (req, res) => {
 app.use('/api/saved-images', savedImagesRouter);
 
 // Start server
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 }); 

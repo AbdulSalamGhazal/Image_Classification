@@ -106,4 +106,14 @@ coverage
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db 
+Thumbs.db
+
+# Docker
+.docker/
+docker-compose.override.yml
+*.env.docker
+
+# Keep docker directory but ignore specific files
+!docker/
+docker/*.env
+docker/*.log 

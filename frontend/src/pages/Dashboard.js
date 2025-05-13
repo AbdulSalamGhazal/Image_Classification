@@ -109,7 +109,7 @@ function Dashboard() {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5001/api/saved-images');
+      const response = await axios.get('http://localhost:5050/api/saved-images');
       const savedImages = response.data;
 
       // Filter images based on timeframe

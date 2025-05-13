@@ -95,4 +95,51 @@ Image_Classification/
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Docker Setup
+
+The project can be run using Docker containers. This ensures consistent environments across different machines.
+
+### Prerequisites
+- Docker
+- Docker Compose
+
+### Running with Docker
+
+1. Build and start all containers:
+```bash
+docker-compose up --build
+```
+
+2. To run in detached mode (background):
+```bash
+docker-compose up -d
+```
+
+3. To stop all containers:
+```bash
+docker-compose down
+```
+
+4. To view logs:
+```bash
+docker-compose logs -f
+```
+
+### Services
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5001
+- ML API: http://localhost:8000
+- MongoDB: localhost:27017
+
+### Volumes
+- MongoDB data is persisted in a Docker volume
+- Uploaded images are stored in `backend/uploads`
+- ML models are stored in `ML_API/classification_models` and `ML_API/yolo_runs`
+
+### Environment Variables
+The following environment variables are set in docker-compose.yml:
+- Frontend: `REACT_APP_API_URL`
+- Backend: `MONGODB_URI`, `ML_API_URL`, `PORT`, `UPLOAD_DIR`
+- ML API: `PYTHONUNBUFFERED` 
