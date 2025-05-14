@@ -116,4 +116,4 @@ docker-compose.override.yml
 # Keep docker directory but ignore specific files
 !docker/
 docker/*.env
-docker/*.log 
+docker/*.log Miniconda3-latest-MacOSX-arm64.sh
