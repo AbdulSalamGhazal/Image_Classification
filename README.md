@@ -164,24 +164,147 @@ Image_Classification/
 └── README.md
 ```
 
-## 🔧 Docker Configuration
+## 🔧 Docker Setup and Usage
 
-The project uses Docker for consistent development and deployment environments. Key configurations:
+### Prerequisites
+- Docker Desktop installed and running
+- Docker Compose installed
+- Git installed
 
-### Services
-- **Frontend**: React app served on port 3000
-- **Backend**: Express API on port 5000
-- **ML API**: FastAPI service on port 8000
-- **MongoDB**: Database on port 27017
+### Quick Start with Docker
 
-### Volumes
-- `mongodb_data`: Persistent MongoDB storage
-- `backend/uploads`: Uploaded images storage
-- `ML_API/classification_models`: ML model storage
-- `ML_API/yolo_runs`: YOLO model storage
+1. Clone the repository:
+```bash
+git clone https://github.com/AbdulSalamGhazal/Image_Classification.git
+cd Image_Classification
+```
 
-### Environment
-All necessary environment variables are configured in `docker-compose.yml` and respective `.env` files.
+2. Create necessary directories:
+```bash
+mkdir -p backend/uploads/saved ML_API/classification_models ML_API/yolo_runs
+```
+
+3. Start all services:
+```bash
+# Build and start all containers
+docker-compose up --build
+
+# Or run in detached mode (background)
+docker-compose up -d --build
+```
+
+4. Access the application:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+- ML API: http://localhost:8000
+- MongoDB: localhost:27017
+
+### Common Docker Commands
+
+```bash
+# View running containers
+docker-compose ps
+
+# View logs
+docker-compose logs -f        # All services
+docker-compose logs -f frontend  # Frontend only
+docker-compose logs -f backend   # Backend only
+
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes
+docker-compose down -v
+
+# Rebuild a specific service
+docker-compose up -d --build frontend
+
+# View container resource usage
+docker stats
+```
+
+### Docker Services
+
+1. **Frontend Service**
+   - React application served via Nginx
+   - Port: 3000 (host) → 80 (container)
+   - Environment: Production-optimized build
+   - Features: Static file serving, API proxy
+
+2. **Backend Service**
+   - Node.js Express API
+   - Port: 5000
+   - Features: File uploads, MongoDB connection
+   - Volumes: Persistent upload storage
+
+3. **MongoDB Service**
+   - Latest MongoDB version
+   - Port: 27017
+   - Volume: Persistent data storage
+
+### Troubleshooting
+
+1. **Port Conflicts**
+   - If ports 3000, 5000, or 27017 are in use:
+   ```bash
+   # Find process using port
+   lsof -i :3000
+   # Kill process
+   kill -9 <PID>
+   ```
+
+2. **Container Issues**
+   ```bash
+   # Restart all services
+   docker-compose restart
+   
+   # Rebuild and restart
+   docker-compose up -d --build
+   
+   # Remove all containers and start fresh
+   docker-compose down
+   docker-compose up -d --build
+   ```
+
+3. **Volume Issues**
+   ```bash
+   # Remove all volumes and start fresh
+   docker-compose down -v
+   docker-compose up -d --build
+   ```
+
+4. **Logs and Debugging**
+   ```bash
+   # View detailed logs
+   docker-compose logs -f --tail=100
+   
+   # Check container status
+   docker-compose ps
+   
+   # Access container shell
+   docker-compose exec backend sh
+   docker-compose exec frontend sh
+   ```
+
+### Development with Docker
+
+1. **Hot Reloading**
+   - Frontend: Changes in `frontend/src` trigger automatic rebuild
+   - Backend: Changes in `backend` trigger server restart
+   - ML API: Changes require container rebuild
+
+2. **Environment Variables**
+   - Development: Use `.env` files in each service directory
+   - Production: Use Docker Compose environment variables
+
+3. **Adding Dependencies**
+   ```bash
+   # Frontend
+   docker-compose exec frontend npm install <package>
+   
+   # Backend
+   docker-compose exec backend npm install <package>
+   ```
 
 ## 🤝 Contributing
 

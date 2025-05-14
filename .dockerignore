@@ -1,0 +1,66 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Node
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv
+*.so
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Build
+build
+dist
+*.egg-info
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Misc
+.DS_Store
+*.log
+*.tmp
+*.temp
+README.md
+LICENSE
+*.md
+
+# ML Models and Data
+ML_API/classification_models/
+ML_API/yolo_runs/
+*.h5
+*.pkl
+*.npy
+*.npz
+*.ckpt
+*.pt
+*.pth
+datasets/
+data/
+
+# Uploads (except .gitkeep)
+backend/uploads/*
+!backend/uploads/.gitkeep
+frontend/public/uploads/*
+!frontend/public/uploads/.gitkeep 
